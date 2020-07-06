@@ -16,6 +16,8 @@ import com.example.serverfoodordering.notification.RetrofitAPI;
 import com.example.serverfoodordering.notification.RetrofitClient;
 import com.example.serverfoodordering.notification.Sender;
 import com.example.serverfoodordering.notification.Token;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,6 +33,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,13 +49,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        updateToken(FirebaseInstanceId.getInstance().getToken());
+//        updateToken(FirebaseInstanceId.getInstance().getToken());
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        String tokenRefreshed = task.getResult().getToken();
+                        updateToken(tokenRefreshed);
+                    }
+                });
+
+
     }
 
     private void updateToken(String tokenRefreshed) {
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Token");
         Token token = new Token(tokenRefreshed, true);
-        dbRef.child("0123456789").setValue(token);
+        dbRef.child("0987654321").setValue(token);
     }
 
 }

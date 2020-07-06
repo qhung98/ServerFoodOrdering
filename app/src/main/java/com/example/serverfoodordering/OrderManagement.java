@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.example.serverfoodordering.adapter.HistoryAdapter;
 import com.example.serverfoodordering.model.Order;
@@ -25,7 +26,7 @@ public class OrderManagement extends AppCompatActivity {
     HistoryAdapter historyAdapter;
 
     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Order");
-    String phone = "0352929696";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,5 +77,13 @@ public class OrderManagement extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         historyAdapter.stopListening();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home){
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
